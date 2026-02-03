@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Defensoría del Pueblo - Registro de Supervisión</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#003366">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="DP Supervisión">
+    <link rel="apple-touch-icon" href="icon-192.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <header>
+        <div class="header-content">
+            <div class="logo">
+                <img src="logo.png" alt="Logo Defensoría" class="header-logo">
+                <span>DEFENSORÍA DEL PUEBLO</span>
+            </div>
+            <div class="badge">Adjuntía para la Prevención de Conflictos Sociales y la Gobernabilidad</div>
+            <button id="defensor-link" class="admin-link">Defensor del Pueblo 🔒</button>
+        </div>
+    </header>
+
+    <main id="app">
+        <!-- Pantalla de Selección Inicial -->
+        <section id="selection-section" class="card">
+            <h2>¿Desde dónde supervisas hoy?</h2>
+            <div class="selection-grid">
+                <button id="choice-acp" class="selection-card">
+                    <span class="icon">🏢</span>
+                    <span class="label">Oficina desconcentrada</span>
+                    <span class="desc">Registro de supervisión en OD/MOD</span>
+                </button>
+                <button id="choice-plan" class="selection-card">
+                    <span class="icon">🏛️</span>
+                    <span class="label">Lima</span>
+                    <span class="desc">Oficina Principal / Sede Central</span>
+                </button>
+            </div>
+        </section>
+
+        <!-- Formulario OD (Antes ACP) -->
+        <section id="acp-section" class="card hidden">
+            <div class="section-header">
+                <button class="back-link">← Volver</button>
+                <h2>Supervisión en Oficina Desconcentrada</h2>
+            </div>
+            <form id="acp-form">
+                <div class="form-group">
+                    <label for="acp-supervisor">Nombre del Comisionado</label>
+                    <input type="text" id="acp-supervisor" placeholder="Tu nombre completo" required>
+                </div>
+                <div class="form-group">
+                    <label for="acp-office">OD/MOD</label>
+                    <input type="text" id="acp-office" list="acp-office-list" placeholder="Escribe para buscar..."
+                        required>
+                    <datalist id="acp-office-list">
+                        <option value="OD Amazonas">
+                        <option value="OD Áncash">
+                        <option value="OD Apurímac">
+                        <option value="OD Arequipa">
+                        <option value="OD Ayacucho">
+                        <option value="OD Cajamarca">
+                        <option value="OD Callao">
+                        <option value="OD Cusco">
+                        <option value="OD Huánuco">
+                        <option value="OD Huancavelica">
+                        <option value="OD Ica">
+                        <option value="OD Junín">
+                        <option value="OD La Libertad">
+                        <option value="OD Lambayeque">
+                        <option value="OD Loreto">
+                        <option value="OD Lima">
+                        <option value="OD Lima Este">
+                        <option value="OD Lima Norte">
+                        <option value="OD Lima Sur">
+                        <option value="OD Lima Provincias">
+                        <option value="OD Madre de Dios">
+                        <option value="OD Moquegua">
+                        <option value="OD Pasco">
+                        <option value="OD Piura">
+                        <option value="OD Puno">
+                        <option value="OD San Martín">
+                        <option value="OD Tacna">
+                        <option value="OD Tumbes">
+                        <option value="OD Ucayali">
+                        <option value="MOD Atalaya">
+                        <option value="MOD Purus">
+                        <option value="MOD Andahuaylas">
+                        <option value="OD Chimbote">
+                        <option value="MOD Huanta">
+                        <option value="MOD Jaén">
+                        <option value="MOD Juliaca">
+                        <option value="MOD La Merced">
+                        <option value="MOD Satipo">
+                        <option value="OD Tarapoto">
+                        <option value="MOD La Convención">
+                        <option value="OD Tingo María">
+                        <option value="MOD Pichari">
+                        <option value="MOD Puquio">
+                        <option value="MOD Desaguadero">
+                        <option value="MOD Aguas Verdes">
+                    </datalist>
+                </div>
+                <div class="form-group">
+                    <label for="acp-date">Fecha de la Supervisión</label>
+                    <input type="date" id="acp-date" readonly required>
+                </div>
+                <div class="form-group">
+                    <label for="acp-category">Categoría de Supervisión</label>
+                    <select id="acp-category" required>
+                        <option value="" disabled selected>Selecciona categoría...</option>
+                        <option value="Espacio de movilización">Espacio de movilización</option>
+                        <option value="Dependencia policial / Seguridad del Estado">Dependencia policial / Seguridad del
+                            Estado</option>
+                        <option value="Establecimiento de salud">Establecimiento de salud</option>
+                        <option value="Videovigilancia">Videovigilancia</option>
+                        <option value="Otro">Otro</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="acp-location">Punto de Supervisión</label>
+                    <input type="text" id="acp-location" placeholder="Escribe el punto..." required>
+                </div>
+                <div class="form-group">
+                    <label for="acp-media">Foto o Video (Opcional)</label>
+                    <input type="file" id="acp-media" accept="image/*,video/*">
+                </div>
+                <div class="form-group">
+                    <label for="acp-observations">Observaciones / Comentarios</label>
+                    <textarea id="acp-observations" rows="3" placeholder="Detalles adicionales..."></textarea>
+                </div>
+                <div class="form-group">
+                    <p class="geo-hint" style="color: #666; font-size: 0.9em; margin-bottom: 10px;">📍 La ubicación se
+                        registrará automáticamente al iniciar.</p>
+                </div>
+                <button type="submit" class="btn-primary">Registrar e Iniciar</button>
+            </form>
+        </section>
+
+        <!-- Formulario Sede Central (Antes Plan) -->
+        <section id="start-section" class="card hidden">
+            <div class="section-header">
+                <button class="back-link">← Volver</button>
+                <h2>Supervisión Lima</h2>
+            </div>
+            <form id="start-form">
+                <div class="form-group">
+                    <label for="shift">Turno</label>
+                    <select id="shift" required>
+                        <option value="" disabled selected>Selecciona turno...</option>
+                        <option value="1er Turno">1er Turno</option>
+                        <option value="2do Turno">2do Turno</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="office">Oficina / Adjuntía / Sede</label>
+                    <input type="text" id="office" list="office-list" placeholder="Escribe para buscar oficina..."
+                        required>
+                    <datalist id="office-list">
+                        <option value="OD Lima">
+                        <option value="OD Lima Este">
+                        <option value="OD Lima Norte">
+                        <option value="OD Lima Sur">
+                        <option value="Despacho del Defensor del Pueblo">
+                        <option value="Primera Adjuntía">
+                        <option value="Adjuntía de Lucha contra la Corrupción, Transparencia y Eficiencia del Estado">
+                        <option value="Adjuntía del Medio Ambiente, Servicios Públicos y Pueblos Indígenas">
+                        <option value="Adjuntía del Medio Ambiente, Cambio Climático y Pueblos Indígenas">
+                        <option value="Adjuntía en Asuntos Constitucionales">
+                        <option value="Adjuntía para el Derecho a la Educación">
+                        <option value="Adjuntía para el Derecho a la Salud">
+                        <option value="Adjuntía para la Administración Estatal">
+                        <option value="Adjuntía para la Descentralización y Desarrollo Socioeconómico">
+                        <option value="Adjuntía para la Niñez y Adolescencia">
+                        <option value="Adjuntía para la Prevención de Conflictos Sociales y la Gobernabilidad">
+                        <option
+                            value="Adjuntía para la Seguridad Ciudadana, Seguridad Nacional y la Lucha contra las Drogas">
+                        <option value="Adjuntía para los Derechos de la Mujer">
+                        <option value="Adjuntía para los Derechos Humanos y Personas con Discapacidad">
+                        <option value="Centro de Estudios Defensoriales">
+                        <option value="Centro de Información">
+                        <option value="Dirección de Atención al Pueblo">
+                        <option value="Dirección de Atención Virtual a la Ciudadanía">
+                        <option value="Dirección de Coordinación Territorial">
+                        <option value="Dirección del Mecanismo Nacional de Prevención de la Tortura">
+                        <option value="Dirección de Litigio Estratégico">
+                        <option value="Gabinete">
+                        <option value="Oficina General de Administración y Finanzas">
+                        <option value="Área de Contabilidad">
+                        <option value="Oficina de Contabilidad">
+                        <option value="Área de Infraestructura y Seguridad Integral">
+                        <option value="Oficina de Infraestructura y Seguridad Integral">
+                        <option value="Área de Logística">
+                        <option value="Área de Tesorería">
+                        <option value="Oficina de Tesorería">
+                        <option value="Control Previo">
+                        <option value="Control Patrimonial">
+                        <option value="Oficina de Control Patrimonial">
+                        <option value="Oficina de Administración y Finanzas">
+                        <option value="Oficina de Asesoría Jurídica">
+                        <option value="Oficina General de Asesoría Jurídica">
+                        <option value="Oficina de Asuntos Contractuales y Sistemas Administrativos">
+                        <option
+                            value="Oficina de Asuntos Laborales, Simplificación Administrativa y Cooperación Internacional">
+                        <option value="Oficina de Comunicaciones e Imagen Institucional">
+                        <option value="Oficina General de Comunicaciones e Imagen Institucional">
+                        <option value="Oficina de Control Institucional">
+                        <option value="Oficina de Gestión y Desarrollo Humano">
+                        <option value="Oficina General de Gestión y Desarrollo Humano">
+                        <option value="Oficina de Remuneraciones y Beneficios">
+                        <option value="Oficina de Desarrollo y Bienestar Social">
+                        <option value="Oficina de Desarrollo Estratégico y Cooperación Internacional">
+                        <option value="Oficina de Cooperación Internacional">
+                        <option value="Oficina de Planeamiento y Presupuesto">
+                        <option value="Oficina General de Planeamiento y Presupuesto">
+                        <option value="Oficina de Planeamiento">
+                        <option value="Oficina de Presupuesto">
+                        <option value="Oficina de Modernización">
+                        <option value="Oficina de Estadística">
+                        <option value="Oficina General de Tecnologías, Innovación y Transformación Digital">
+                        <option value="Oficina de Ingeniería de Software">
+                        <option value="Oficina de Infraestructura Tecnológica">
+                        <option value="Oficina de Soporte Técnico">
+                        <option
+                            value="Programa de Defensa y Promoción de los Derechos de las Personas con Discapacidad">
+                        <option value="Programa de Investigaciones Especiales en Derechos Humanos">
+                        <option value="Programa de Pueblos Indígenas">
+                        <option value="Programa para la Supervisión de Contrataciones e Inversiones Públicas">
+                        <option value="Programa para las Personas Privadas de la Libertad">
+                        <option value="Programa para los Derechos de las Personas Migrantes">
+                        <option value="Programa para los Derechos de las Personas en Movilidad Humana">
+                        <option value="Programa Rompiendo Cadenas">
+                        <option value="Programa de Litigio Estratégico">
+                        <option value="Secretaría General">
+                        <option value="SG - Gestión Documentaria y Archivo">
+                        <option value="Oficina de Gestión Documentaria y Archivo">
+                        <option value="Oficina de Integridad Institucional">
+                        <option value="Secretaría Técnica Especializada">
+                    </datalist>
+                </div>
+                <div class="form-group">
+                    <label for="name">Nombre del Comisionado</label>
+                    <input type="text" id="name" placeholder="Tu nombre completo" required>
+                </div>
+                <div class="form-group">
+                    <label for="protest-name">Nombre de la Protesta</label>
+                    <input type="text" id="protest-name" list="protest-list-plan"
+                        placeholder="Nombre del colectivo o marcha" required>
+                    <datalist id="protest-list-plan" class="protest-list-dynamic"></datalist>
+                </div>
+                <div class="form-group">
+                    <label for="category">Categoría de Supervisión</label>
+                    <select id="category" required>
+                        <option value="" disabled selected>Selecciona categoría...</option>
+                        <option value="Espacio de movilización">Espacio de movilización</option>
+                        <option value="Dependencia policial / Seguridad del Estado">Dependencia policial / Seguridad del
+                            Estado</option>
+                        <option value="Establecimiento de salud">Establecimiento de salud</option>
+                        <option value="Videovigilancia">Videovigilancia</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="location">Punto de Supervisión</label>
+                    <input type="text" id="location" list="location-list" placeholder="Escribe o selecciona..."
+                        required>
+                    <datalist id="location-list">
+                        <!-- Se puebla dinámicamente desde app.js -->
+                    </datalist>
+                </div>
+                <div class="form-group">
+                    <label for="date">Fecha de la Supervisión</label>
+                    <input type="date" id="date" readonly required>
+                </div>
+                <div class="form-group">
+                    <label for="media">Foto o Video (Opcional)</label>
+                    <input type="file" id="media" accept="image/*,video/*">
+                </div>
+                <div class="form-group">
+                    <label for="observations">Observaciones / Comentarios</label>
+                    <textarea id="observations" rows="3"
+                        placeholder="Detalles adicionales, incidencias, etc."></textarea>
+                </div>
+                <div class="form-group">
+                    <p class="geo-hint" style="color: #666; font-size: 0.9em; margin-bottom: 10px;">📍 La ubicación se
+                        registrará automáticamente al iniciar.</p>
+                </div>
+                <button type="submit" class="btn-primary">Iniciar Supervisión</button>
+            </form>
+        </section>
+
+        <!-- Sesión Activa -->
+        <section id="active-section" class="card hidden">
+            <div class="active-header">
+                <span class="status-dot"></span>
+                <h3>Supervisión en Curso</h3>
+            </div>
+            <div id="active-info">
+                <p><strong>Punto:</strong> <span id="display-location"></span></p>
+                <p><strong>Inicio:</strong> <span id="display-start"></span></p>
+                <p><strong>GPS Inicio:</strong> <span id="display-start-geo">Pendiente...</span></p>
+            </div>
+            <div class="timer" id="timer">00:00:00</div>
+
+            <!-- Incidencias -->
+            <div class="incident-actions" style="margin: 20px 0; text-align: center;">
+                <button id="add-incident-btn" class="btn-primary"
+                    style="background-color: #f39c12; border-color: #e67e22;">
+                    🚩 Registrar Incidencia
+                </button>
+            </div>
+            <div id="incidents-timeline" class="timeline-container">
+                <!-- Se llena dinámicamente -->
+            </div>
+            <div class="form-group">
+                <p class="geo-hint" style="color: #666; font-size: 0.9em; margin-bottom: 10px; text-align: center;">📍
+                    Al finalizar se registrará tu ubicación final.</p>
+            </div>
+            <button id="finish-btn" class="btn-danger">Finalizar Supervisión</button>
+        </section>
+
+        <!-- Historial -->
+        <section id="history-section" class="card">
+            <div class="history-header">
+                <h2>Historial de Registros</h2>
+                <button id="export-btn" class="btn-secondary">Exportar</button>
+            </div>
+            <div id="history-list" class="history-list">
+                <!-- Se llenará dinámicamente -->
+                <p class="empty-msg">No hay registros previos.</p>
+            </div>
+        </section>
+    </main>
+
+    <!-- Modal Incidencias -->
+    <div id="incident-modal" class="modal hidden-modal">
+        <div class="modal-content">
+            <h3>Nueva Incidencia</h3>
+            <div class="form-group">
+                <label for="incident-time">Hora del evento</label>
+                <input type="time" id="incident-time" readonly>
+            </div>
+            <div class="form-group">
+                <textarea id="incident-desc" placeholder="Describe lo que está pasando..." rows="4"
+                    style="width: 100%; padding: 10px;"></textarea>
+            </div>
+            <div class="form-group">
+                <label class="btn-secondary" style="display: block; text-align: center; margin-bottom: 5px;">
+                    📷 Tomar Foto (Opcional)
+                    <input type="file" id="incident-photo" accept="image/*" capture="environment"
+                        style="display: none;">
+                </label>
+                <div id="incident-photo-name" style="text-align: center; font-size: 0.8rem; color: #666;">Sin archivo
+                </div>
+            </div>
+            <div class="modal-actions" style="display: flex; gap: 10px; justify-content: space-between;">
+                <button id="cancel-incident-btn" class="btn-secondary"
+                    style="background-color: #95a5a6;">Cancelar</button>
+                <button id="save-incident-btn" class="btn-primary">Guardar</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+    <div style="text-align: center; font-size: 0.8rem; color: #666; padding: 10px;">
+        v2.1 - Unificado
+    </div>
+</body>
+
+</html>
