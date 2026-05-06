@@ -29,9 +29,35 @@ filterDate.addEventListener('change', renderDashboard);
 filterRegion.addEventListener('change', renderDashboard);
 filterProtest.addEventListener('change', renderDashboard);
 
+function generateSkeletonHTML() {
+    return `
+        <div class="skeleton-card">
+            <div style="flex-grow: 1; width: 100%;">
+                <div class="skeleton-text" style="width: 70%;"></div>
+                <div class="skeleton-text" style="width: 40%;"></div>
+                <div class="skeleton-text" style="width: 50%;"></div>
+            </div>
+        </div>
+        <div class="skeleton-card">
+            <div style="flex-grow: 1; width: 100%;">
+                <div class="skeleton-text" style="width: 60%;"></div>
+                <div class="skeleton-text" style="width: 50%;"></div>
+                <div class="skeleton-text" style="width: 30%;"></div>
+            </div>
+        </div>
+        <div class="skeleton-card">
+            <div style="flex-grow: 1; width: 100%;">
+                <div class="skeleton-text" style="width: 80%;"></div>
+                <div class="skeleton-text" style="width: 40%;"></div>
+                <div class="skeleton-text" style="width: 60%;"></div>
+            </div>
+        </div>
+    `;
+}
+
 async function fetchData() {
-    loadingIndicator.style.display = 'block';
-    reportsList.innerHTML = '';
+    if (loadingIndicator) loadingIndicator.style.display = 'none';
+    reportsList.innerHTML = generateSkeletonHTML();
 
     try {
         const response = await fetch(GOOGLE_SHEETS_URL);
@@ -404,4 +430,95 @@ async function addListItem(type, inputElement) {
         btn.textContent = originalBtnText;
         btn.disabled = false;
     }
+}
+
+// --- GENERADOR DE REPORTE DOCS ---
+const generateDocBtn = document.getElementById('generate-doc-btn');
+if (generateDocBtn) {
+    generateDocBtn.addEventListener('click', async () => {
+        const dateStr = filterDate.value || new Date().toISOString().split('T')[0];
+        
+        let filtered = allData.filter(item => {
+            let itemDateStr = "";
+            let rawDate = item.fecha;
+            if (typeof rawDate === 'string' && rawDate.includes('/')) {
+                const parts = rawDate.split('/');
+                if (parts.length === 3) itemDateStr = `${parts[2]}-${parts[1].padStart(2, '0')}-${parts[0].padStart(2, '0')}`;
+            } else if (rawDate) {
+                const d = new Date(rawDate);
+                if (!isNaN(d)) itemDateStr = d.toISOString().split('T')[0];
+            }
+
+            const type = item.tipo_registro || "";
+            const protest = item.nombre_protesta || "";
+
+            if (filterDate.value && itemDateStr !== filterDate.value) return false;
+            if (filterRegion.value && type !== filterRegion.value) return false;
+            if (filterProtest.value && protest !== filterProtest.value) return false;
+            
+            return true;
+        });
+
+        const tableData = [];
+        filtered.forEach(item => {
+            let acts = item.nombre_protesta || item.categoria || '';
+            let loc = item.oficina + " - " + item.punto;
+            
+            let measure = "";
+            if (item.incidencias && item.incidencias.length > 0) {
+                measure = item.incidencias.map(inc => `- [${inc.hora}] ${inc.descripcion}`).join("\n");
+            } else {
+                measure = item.observaciones || "Sin incidencias registradas.";
+            }
+
+            tableData.push({
+                ubicacion: loc,
+                medida: measure,
+                actores: acts
+            });
+        });
+
+        if (tableData.length === 0) {
+            alert("No hay datos para generar el reporte en los filtros actuales.");
+            return;
+        }
+
+        const originalText = generateDocBtn.innerHTML;
+        generateDocBtn.innerHTML = "⏳ Generando...";
+        generateDocBtn.disabled = true;
+
+        try {
+            const response = await fetch(GOOGLE_SHEETS_URL, {
+                method: 'POST',
+                body: JSON.stringify({
+                    action: 'generate_report',
+                    fecha: dateStr,
+                    templateId: '1w-hlsupcw25wAjTGX1v0Mcu-bK2Jz65yKbOVavfL2Fk',
+                    folderId: '1m94zPHdljqkIewoxRAX9CapIx-mYa6Wj',
+                    tableData: tableData
+                })
+            });
+            
+            const textResult = await response.text();
+            let result;
+            try {
+                result = JSON.parse(textResult);
+            } catch (err) {
+                alert("Error en el servidor de Google: " + textResult);
+                return;
+            }
+
+            if (result.success && result.url) {
+                window.open(result.url, '_blank');
+            } else {
+                alert("Error al generar: " + (result.error || "Asegúrate de haber actualizado google_apps_script.js"));
+            }
+        } catch (e) {
+            console.error(e);
+            alert("Fallo de red al conectar con Google. Revisa la consola (F12).");
+        } finally {
+            generateDocBtn.innerHTML = originalText;
+            generateDocBtn.disabled = false;
+        }
+    });
 }

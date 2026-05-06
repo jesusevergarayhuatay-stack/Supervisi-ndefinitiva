@@ -641,14 +641,7 @@ cancelIncidentBtn.addEventListener('click', () => {
     incidentModal.classList.add('hidden-modal');
 });
 
-// Mostrar nombre de archivo
-incidentPhotoInput.addEventListener('change', () => {
-    if (incidentPhotoInput.files[0]) {
-        incidentPhotoName.textContent = "📄 " + incidentPhotoInput.files[0].name;
-    } else {
-        incidentPhotoName.textContent = "Sin archivo";
-    }
-});
+// Lógica manejada por setupDropzone
 
 // Guardar Incidencia
 saveIncidentBtn.addEventListener('click', async () => {
@@ -772,5 +765,85 @@ document.addEventListener('DOMContentLoaded', () => {
     enforceStrictDatalist('protest-name');  // Nombre de Protesta (Lima)
     enforceStrictDatalist('acp-office');    // OD/MOD (Provincias)
 });
+
+// --- LÓGICA DE DRAG & DROP ---
+function setupDropzone(dropzoneId, inputId, contentId, previewId, nameId = null) {
+    const dropzone = document.getElementById(dropzoneId);
+    const input = document.getElementById(inputId);
+    const content = document.getElementById(contentId);
+    const preview = document.getElementById(previewId);
+    const nameDisplay = nameId ? document.getElementById(nameId) : null;
+    
+    if (!dropzone || !input) return;
+
+    ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+        dropzone.addEventListener(eventName, preventDefaults, false);
+    });
+
+    function preventDefaults(e) {
+        e.preventDefault();
+        e.stopPropagation();
+    }
+
+    ['dragenter', 'dragover'].forEach(eventName => {
+        dropzone.addEventListener(eventName, () => dropzone.classList.add('dragover'), false);
+    });
+
+    ['dragleave', 'drop'].forEach(eventName => {
+        dropzone.addEventListener(eventName, () => dropzone.classList.remove('dragover'), false);
+    });
+
+    dropzone.addEventListener('drop', (e) => {
+        let dt = e.dataTransfer;
+        let files = dt.files;
+        if (files.length > 0) {
+            input.files = files;
+            handleFiles(files[0]);
+        }
+    });
+
+    input.addEventListener('change', function() {
+        if (this.files.length > 0) {
+            handleFiles(this.files[0]);
+        } else {
+            resetPreview();
+        }
+    });
+
+    function handleFiles(file) {
+        if (file.type.startsWith('image/')) {
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = (e) => {
+                preview.src = e.target.result;
+                preview.style.display = 'block';
+                content.style.display = 'none';
+                if(nameDisplay) nameDisplay.textContent = "📄 " + file.name;
+            };
+        } else {
+            preview.style.display = 'none';
+            content.style.display = 'flex';
+            content.querySelector('.dropzone-icon').textContent = '📄';
+            content.querySelector('.dropzone-text').textContent = file.name;
+            if(nameDisplay) nameDisplay.textContent = "📄 " + file.name;
+        }
+    }
+    
+    function resetPreview() {
+        preview.src = '';
+        preview.style.display = 'none';
+        content.style.display = 'flex';
+        content.querySelector('.dropzone-icon').textContent = '📷';
+        content.querySelector('.dropzone-text').textContent = dropzoneId === 'dropzone-incident' ? 'Adjuntar foto' : 'Arrastra tu archivo aquí o haz clic para seleccionar';
+        if(nameDisplay) nameDisplay.textContent = "Sin archivo";
+    }
+
+    dropzone.resetPreview = resetPreview;
+}
+
+// Inicializar dropzones
+setupDropzone('dropzone-acp', 'acp-media', 'dropzone-content-acp', 'preview-acp');
+setupDropzone('dropzone-sede', 'media', 'dropzone-content-sede', 'preview-sede');
+setupDropzone('dropzone-incident', 'incident-photo', 'dropzone-content-incident', 'preview-incident', 'incident-photo-name');
 
 init();

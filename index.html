@@ -130,15 +130,22 @@
                     <label for="acp-location">Punto de Supervisión</label>
                     <input type="text" id="acp-location" placeholder="Escribe el punto..." required>
                 </div>
-                <div class="form-group">
-                    <label for="acp-media">Foto o Video (Opcional)</label>
-                    <input type="file" id="acp-media" accept="image/*,video/*">
+                <div class="form-group full-width">
+                    <label>Foto o Video (Opcional)</label>
+                    <div class="dropzone" id="dropzone-acp">
+                        <input type="file" id="acp-media" accept="image/*,video/*">
+                        <div class="dropzone-content" id="dropzone-content-acp">
+                            <div class="dropzone-icon">📷</div>
+                            <div class="dropzone-text">Arrastra tu archivo aquí o haz clic para seleccionar</div>
+                        </div>
+                        <img src="" alt="Preview" class="dropzone-preview" id="preview-acp">
+                    </div>
                 </div>
-                <div class="form-group">
+                <div class="form-group full-width">
                     <label for="acp-observations">Observaciones / Comentarios</label>
                     <textarea id="acp-observations" rows="3" placeholder="Detalles adicionales..."></textarea>
                 </div>
-                <div class="form-group">
+                <div class="form-group full-width">
                     <p class="geo-hint" style="color: #666; font-size: 0.9em; margin-bottom: 10px;">📍 La ubicación se
                         registrará automáticamente al iniciar.</p>
                 </div>
@@ -280,16 +287,23 @@
                     <label for="date">Fecha de la Supervisión</label>
                     <input type="date" id="date" readonly required>
                 </div>
-                <div class="form-group">
-                    <label for="media">Foto o Video (Opcional)</label>
-                    <input type="file" id="media" accept="image/*,video/*">
+                <div class="form-group full-width">
+                    <label>Foto o Video (Opcional)</label>
+                    <div class="dropzone" id="dropzone-sede">
+                        <input type="file" id="media" accept="image/*,video/*">
+                        <div class="dropzone-content" id="dropzone-content-sede">
+                            <div class="dropzone-icon">📷</div>
+                            <div class="dropzone-text">Arrastra tu archivo aquí o haz clic para seleccionar</div>
+                        </div>
+                        <img src="" alt="Preview" class="dropzone-preview" id="preview-sede">
+                    </div>
                 </div>
-                <div class="form-group">
+                <div class="form-group full-width">
                     <label for="observations">Observaciones / Comentarios</label>
                     <textarea id="observations" rows="3"
                         placeholder="Detalles adicionales, incidencias, etc."></textarea>
                 </div>
-                <div class="form-group">
+                <div class="form-group full-width">
                     <p class="geo-hint" style="color: #666; font-size: 0.9em; margin-bottom: 10px;">📍 La ubicación se
                         registrará automáticamente al iniciar.</p>
                 </div>
@@ -353,12 +367,15 @@
                     style="width: 100%; padding: 10px;"></textarea>
             </div>
             <div class="form-group">
-                <label class="btn-secondary" style="display: block; text-align: center; margin-bottom: 5px;">
-                    📷 Tomar Foto (Opcional)
-                    <input type="file" id="incident-photo" accept="image/*" capture="environment"
-                        style="display: none;">
-                </label>
-                <div id="incident-photo-name" style="text-align: center; font-size: 0.8rem; color: #666;">Sin archivo
+                <div class="dropzone" id="dropzone-incident" style="padding: 1rem;">
+                    <input type="file" id="incident-photo" accept="image/*" capture="environment">
+                    <div class="dropzone-content" id="dropzone-content-incident">
+                        <div class="dropzone-icon" style="font-size: 1.5rem;">📷</div>
+                        <div class="dropzone-text" style="font-size: 0.8rem;">Adjuntar foto</div>
+                    </div>
+                    <img src="" alt="Preview" class="dropzone-preview" id="preview-incident">
+                </div>
+                <div id="incident-photo-name" style="text-align: center; font-size: 0.8rem; color: #666; margin-top: 5px;">Sin archivo
                 </div>
             </div>
             <div class="modal-actions" style="display: flex; gap: 10px; justify-content: space-between;">

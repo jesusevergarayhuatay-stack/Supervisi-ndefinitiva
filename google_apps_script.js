@@ -168,6 +168,56 @@ function doPost(e) {
             }
         }
 
+        // --- ACCIÓN: GENERAR REPORTE DOC ---
+        else if (action === 'generate_report') {
+            var templateId = data.templateId;
+            var folderId = data.folderId;
+            var fecha = data.fecha;
+            var tableData = data.tableData;
+
+            var folder = DriveApp.getFolderById(folderId);
+            var template = DriveApp.getFileById(templateId);
+            var newDocFile = template.makeCopy("Reporte de Monitoreo - " + fecha, folder);
+            var newDocId = newDocFile.getId();
+            var doc = DocumentApp.openById(newDocId);
+            var body = doc.getBody();
+
+            body.replaceText("{{fecha_protesta}}", fecha);
+
+            var tables = body.getTables();
+            var targetTable = null;
+            var targetRowIndex = -1;
+
+            for (var i = 0; i < tables.length; i++) {
+                var table = tables[i];
+                for (var r = 0; r < table.getNumRows(); r++) {
+                    var row = table.getRow(r);
+                    if (row.getText().indexOf("{{tabla_ubicacion}}") !== -1) {
+                        targetTable = table;
+                        targetRowIndex = r;
+                        break;
+                    }
+                }
+                if (targetTable) break;
+            }
+
+            if (targetTable && targetRowIndex !== -1) {
+                var templateRow = targetTable.getRow(targetRowIndex);
+                for (var d = 0; d < tableData.length; d++) {
+                    var item = tableData[d];
+                    var newRow = targetTable.insertTableRow(targetRowIndex + 1 + d, templateRow.copy());
+                    newRow.replaceText("{{tabla_ubicacion}}", item.ubicacion || "");
+                    newRow.replaceText("{{tabla_medida}}", item.medida || "");
+                    newRow.replaceText("{{tabla_actores}}", item.actores || "");
+                }
+                targetTable.removeRow(targetRowIndex);
+            }
+
+            doc.saveAndClose();
+            return ContentService.createTextOutput(JSON.stringify({ success: true, url: newDocFile.getUrl() }))
+                .setMimeType(ContentService.MimeType.JSON);
+        }
+
         return ContentService.createTextOutput("Success").setMimeType(ContentService.MimeType.TEXT);
 
     } catch (e) {
