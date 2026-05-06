@@ -9,7 +9,8 @@ const refreshBtn = document.getElementById('refresh-btn');
 const reportsList = document.getElementById('reports-list');
 const loadingIndicator = document.getElementById('loading');
 const statTotal = document.getElementById('stat-total');
-const statSupervisors = document.getElementById('stat-supervisors');
+const statActive = document.getElementById('stat-active');
+const statFinished = document.getElementById('stat-finished');
 const statIncidents = document.getElementById('stat-incidents');
 
 let allData = [];
@@ -242,8 +243,8 @@ function renderDashboard() {
         const supervisor = item.supervisor || "";
 
         // Formato horas
-        let inicio = item.inicio || "";
-        let fin = item.fin || "En curso";
+        let inicio = item.inicio || item.hora_inicio || "";
+        let fin = item.fin || item.hora_fin || "En curso";
         // Si vienen como objeto Date, formatear
         if (inicio instanceof Date) inicio = inicio.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
         if (fin instanceof Date) fin = fin.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
@@ -275,6 +276,11 @@ function renderDashboard() {
             ? `<span class="badge" style="background: #e67e22;">${incidentCount} Incidencias</span>`
             : `<span class="badge" style="background: #16a34a;">Sin Novedad</span>`;
 
+        const isFinished = fin !== "En curso";
+        const progressBadge = isFinished 
+            ? `<span class="badge" style="background: #64748b;">Finalizado</span>`
+            : `<span class="badge" style="background: #3b82f6;">En curso</span>`;
+
         const obsHtml = obs
             ? `<p style="margin-top:10px; font-style:italic; color:#444; background:#f8fafc; padding:8px; border-radius:6px;">"${obs}"</p>`
             : '';
@@ -297,7 +303,10 @@ function renderDashboard() {
                 ${incidentsHtml}
             </div>
             <div style="display:flex; flex-direction:column; align-items:flex-end; gap:10px;">
-                ${statusBadge}
+                <div style="display:flex; gap:5px; flex-wrap:wrap; justify-content:flex-end;">
+                    ${progressBadge}
+                    ${statusBadge}
+                </div>
                 ${photoHtml}
             </div>
         `;
@@ -308,14 +317,23 @@ function renderDashboard() {
 function updateStats(data) {
     statTotal.textContent = data.length;
 
-    const uniqueSupervisors = new Set(data.map(d => d.supervisor)).size;
-    statSupervisors.textContent = uniqueSupervisors;
-
+    let activeCount = 0;
+    let finishedCount = 0;
     let totalIncidents = 0;
+
     data.forEach(d => {
+        let fin = d.fin || d.hora_fin;
+        if (!fin || fin === "En curso") {
+            activeCount++;
+        } else {
+            finishedCount++;
+        }
         if (d.incidencias_array) totalIncidents += d.incidencias_array.length;
     });
-    statIncidents.textContent = totalIncidents;
+
+    if (statActive) statActive.textContent = activeCount;
+    if (statFinished) statFinished.textContent = finishedCount;
+    if (statIncidents) statIncidents.textContent = totalIncidents;
 }
 
 // GESTIÓN DE LISTAS DINÁMICAS
