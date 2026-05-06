@@ -69,6 +69,12 @@
             display: grid;
             grid-template-columns: 1fr auto;
             gap: 1rem;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .report-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
         }
 
         .report-meta {
@@ -124,13 +130,17 @@
                 </select>
             </div>
 
-            <div style="display: flex; gap: 10px; align-items: flex-end;">
-                <button id="refresh-btn" class="btn-primary" style="height: 48px; flex: 1;">
+            <div style="display: flex; gap: 10px; align-items: flex-end; flex-wrap: wrap;">
+                <button id="refresh-btn" class="btn-primary" style="height: 48px; flex: 1; min-width: 120px;">
                     Actualizar 🔄
                 </button>
                 <button id="manage-lists-btn" class="btn-secondary"
-                    style="height: 48px; flex: 1; background-color: #f39c12; border-color: #d35400;">
+                    style="height: 48px; flex: 1; background-color: #f39c12; border-color: #d35400; min-width: 120px;">
                     Listas 📋
+                </button>
+                <button id="generate-doc-btn" class="btn-secondary"
+                    style="height: 48px; flex: 1; background-color: #27ae60; border-color: #2ecc71; min-width: 150px;">
+                    📄 Crear Reporte
                 </button>
             </div>
         </section>
